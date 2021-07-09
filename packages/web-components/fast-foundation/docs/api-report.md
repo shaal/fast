@@ -1539,8 +1539,6 @@ export class Picker extends FoundationElement {
     handleSelectionChange(): void;
     // (undocumented)
     protected hasFocus: boolean;
-    // @internal
-    inputElement: HTMLInputElement;
     itemTemplate: ViewTemplate;
     label: string;
     labelledby: string;
@@ -1566,7 +1564,7 @@ export class Picker extends FoundationElement {
     // @internal (undocumented)
     region: AnchoredRegion;
     // @internal
-    selectedList: HTMLElement;
+    selectedList: PickerList;
     // @internal (undocumented)
     selectedlisttag: string;
     // @internal (undocumented)
@@ -1578,13 +1576,17 @@ export class Picker extends FoundationElement {
     showNoOptions: boolean;
     suggestionsAvailableText: string;
     // (undocumented)
-    protected toggleFlyout(open: boolean): void;
-    // (undocumented)
     updatePosition: () => void;
 }
 
 // @public
 export class PickerList extends FoundationElement {
+    // @internal (undocumented)
+    connectedCallback(): void;
+    // (undocumented)
+    inputElement: HTMLInputElement;
+    // (undocumented)
+    itemsPlaceholderElement: Node;
 }
 
 // @public (undocumented)
