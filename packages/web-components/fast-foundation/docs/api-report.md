@@ -1511,10 +1511,14 @@ export type ParentLocator = (owner: any) => Container | null;
 
 // @public
 export class Picker extends FoundationElement {
+    // @internal
+    activeListItemTemplate?: ViewTemplate;
+    // @internal
+    activeMenuOptionTemplate?: ViewTemplate;
     // @internal (undocumented)
     connectedCallback(): void;
-    defaultItemTemplate: ViewTemplate;
-    defaultOptionTemplate: ViewTemplate;
+    defaultListItemTemplate?: ViewTemplate;
+    defaultMenuOptionTemplate?: ViewTemplate;
     // (undocumented)
     disconnectedCallback(): void;
     // @internal (undocumented)
@@ -1539,9 +1543,9 @@ export class Picker extends FoundationElement {
     handleSelectionChange(): void;
     // (undocumented)
     protected hasFocus: boolean;
-    itemTemplate: ViewTemplate;
     label: string;
     labelledby: string;
+    listItemTemplate: ViewTemplate;
     loadingText: string;
     maxSelected: number | undefined;
     menuConfig: AnchoredRegionConfig;
@@ -1550,14 +1554,14 @@ export class Picker extends FoundationElement {
     // @internal (undocumented)
     menuFocusIndex: number;
     // @internal (undocumented)
-    menuFocusOptionId: string | null;
+    menuFocusOptionId: string | undefined;
     // @internal (undocumented)
     menuId: string;
+    menuOptionTemplate: ViewTemplate;
     noSuggestionsText: string;
     options: string;
     // (undocumented)
     optionsList: string[];
-    optionTemplate: ViewTemplate;
     // @internal (undocumented)
     pickermenutag: string;
     query: string;
@@ -1587,7 +1591,27 @@ export class PickerList extends FoundationElement {
     inputElement: HTMLInputElement;
     // (undocumented)
     itemsPlaceholderElement: Node;
+    label: string;
+    labelledby: string;
 }
+
+// @public
+export class PickerListItem extends FoundationElement {
+    // @internal (undocumented)
+    connectedCallback(): void;
+    // (undocumented)
+    contentsTemplate: ViewTemplate;
+    // @internal (undocumented)
+    disconnectedCallback(): void;
+    // (undocumented)
+    handleFocusin(e: FocusEvent): void;
+    // (undocumented)
+    handleFocusout(e: FocusEvent): void;
+    value: string;
+}
+
+// @public (undocumented)
+export const pickerListItemTemplate: (context: any, definition: any) => ViewTemplate<PickerListItem>;
 
 // @public (undocumented)
 export const pickerListTemplate: (context: any, definition: any) => ViewTemplate<PickerList>;
@@ -1613,6 +1637,24 @@ export class PickerMenu extends FoundationElement {
     // (undocumented)
     suggestionsAvailableText: string;
     }
+
+// @public
+export class PickerMenuOption extends FoundationElement {
+    // @internal (undocumented)
+    connectedCallback(): void;
+    // (undocumented)
+    contentsTemplate: ViewTemplate;
+    // @internal (undocumented)
+    disconnectedCallback(): void;
+    // (undocumented)
+    handleFocusin(e: FocusEvent): void;
+    // (undocumented)
+    handleFocusout(e: FocusEvent): void;
+    value: string;
+}
+
+// @public (undocumented)
+export const pickerMenuOptionTemplate: (context: any, definition: any) => ViewTemplate<PickerMenuOption>;
 
 // @public (undocumented)
 export type PickerMenuPosition = "top" | "bottom";
