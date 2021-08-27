@@ -2,8 +2,8 @@ import { html, slotted } from "@microsoft/fast-element";
 import type { ViewTemplate } from "@microsoft/fast-element";
 import { Listbox } from "../listbox/listbox";
 import { endTemplate, startTemplate } from "../patterns/start-end";
-import type { Select, SelectOptions } from "./select";
 import type { ElementDefinitionContext } from "../design-system";
+import type { Select, SelectOptions } from "./select";
 
 /**
  * The template for the {@link @microsoft/fast-foundation#(Select:class)} component.
@@ -42,7 +42,7 @@ export const selectTemplate: (
                 <div class="selected-value" part="selected-value">
                     <slot name="selected-value">${x => x.displayValue}</slot>
                 </div>
-                <div class="indicator" part="indicator" aria-hidden="true">
+                <div class="indicator" part="indicator">
                     <slot name="indicator">
                         ${definition.indicator || ""}
                     </slot>

@@ -1,8 +1,8 @@
 import { html, ref, slotted, when } from "@microsoft/fast-element";
 import type { ViewTemplate } from "@microsoft/fast-element";
 import { endTemplate, startTemplate } from "../patterns";
-import type { NumberField, NumberFieldOptions } from "./number-field";
 import type { ElementDefinitionContext } from "../design-system";
+import type { NumberField, NumberFieldOptions } from "./number-field";
 
 /**
  * The template for the {@link @microsoft/fast-foundation#(NumberField:class)} component.
@@ -34,6 +34,7 @@ export const numberFieldTemplate: (
                 id="control"
                 @input="${x => x.handleTextInput()}"
                 @change="${x => x.handleChange()}"
+                @keydown="${(x, c) => x.handleKeyDown(c.event as KeyboardEvent)}"
                 ?autofocus="${x => x.autofocus}"
                 ?disabled="${x => x.disabled}"
                 list="${x => x.list}"
@@ -71,7 +72,7 @@ export const numberFieldTemplate: (
                 ${ref("control")}
             />
             ${when(
-                x => !x.hideStep,
+                x => !x.hideStep && !x.readOnly && !x.disabled,
                 html`
                     <div class="controls" part="controls">
                         <div class="step-up" part="step-up" @click="${x => x.stepUp()}">

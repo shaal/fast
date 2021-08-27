@@ -1,6 +1,10 @@
 import { ManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
 import { Direction } from "@microsoft/fast-web-utilities";
-import { DataDictionary } from "@microsoft/fast-tooling";
+import {
+    DataDictionary,
+    MessageSystemType,
+    SchemaDictionary,
+} from "@microsoft/fast-tooling";
 import { StandardLuminance } from "@microsoft/fast-components";
 import { DisplayMode } from "./utilities/shared";
 
@@ -111,6 +115,11 @@ export interface ProjectFile {
     dataDictionary: DataDictionary<unknown>;
 
     /**
+     * The schema dictionary
+     */
+    schemaDictionary: SchemaDictionary;
+
+    /**
      * Preview background transparency
      */
     transparentBackground: boolean;
@@ -133,4 +142,17 @@ export interface CreatorState extends ProjectFile {
      * The preview is ready state
      */
     previewReady: boolean;
+}
+
+export interface ExternalInitializingData {
+    /**
+     * The type of external message sent
+     */
+    type: MessageSystemType.dataDictionary;
+
+    /**
+     * The data dictionary for resetting the
+     * current data dictionary
+     */
+    data: DataDictionary<unknown>;
 }

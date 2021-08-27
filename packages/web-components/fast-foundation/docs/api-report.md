@@ -103,25 +103,27 @@ export class AnchoredRegion extends FoundationElement {
     fixedPlacement: boolean;
     horizontalDefaultPosition: HorizontalPosition;
     horizontalInset: boolean;
-    // Warning: (ae-forgotten-export) The symbol "AnchoredRegionHorizontalPositionLabel" needs to be exported by the entry point index.d.ts
-    horizontalPosition: AnchoredRegionHorizontalPositionLabel;
+    horizontalPosition: AnchoredRegionPositionLabel | undefined;
     horizontalPositioningMode: AxisPositioningMode;
     horizontalScaling: AxisScalingMode;
     horizontalThreshold: number;
+    horizontalViewportLock: boolean;
     // @internal
     initialLayoutComplete: boolean;
     update: () => void;
-    updateAnchorOffset: (horizontalOffsetDelta: number, verticalOffsetDelta: number) => void;
     verticalDefaultPosition: VerticalPosition;
     verticalInset: boolean;
-    // Warning: (ae-forgotten-export) The symbol "AnchoredRegionVerticalPositionLabel" needs to be exported by the entry point index.d.ts
-    verticalPosition: AnchoredRegionVerticalPositionLabel;
+    verticalPosition: AnchoredRegionPositionLabel | undefined;
     verticalPositioningMode: AxisPositioningMode;
     verticalScaling: AxisScalingMode;
     verticalThreshold: number;
+    verticalViewportLock: boolean;
     viewport: string;
     viewportElement: HTMLElement | null;
     }
+
+// @beta
+export type AnchoredRegionPositionLabel = "start" | "insetStart" | "insetEnd" | "end";
 
 // @beta
 export const anchoredRegionTemplate: (context: ElementDefinitionContext, definition: FoundationElementDefinition) => ViewTemplate<AnchoredRegion>;
@@ -752,6 +754,8 @@ export interface DesignToken<T extends string | number | boolean | BigInteger | 
 // @public
 export const DesignToken: Readonly<{
     create: typeof create;
+    notifyConnection(element: HTMLElement): boolean;
+    notifyDisconnection(element: HTMLElement): boolean;
 }>;
 
 // @public
@@ -805,6 +809,8 @@ export class Dialog extends FoundationElement {
     disconnectedCallback(): void;
     // @internal (undocumented)
     dismiss(): void;
+    // @internal (undocumented)
+    handleChange(source: any, propertyName: string): void;
     hidden: boolean;
     hide(): void;
     modal: boolean;
@@ -1035,6 +1041,11 @@ export class FoundationElementRegistry<TDefinition extends FoundationElementDefi
     readonly type: Constructable<FoundationElement>;
 }
 
+// Warning: (ae-forgotten-export) The symbol "LazyFoundationOption" needs to be exported by the entry point index.d.ts
+//
+// @public
+export type FoundationElementTemplate<T, K = void> = LazyFoundationOption<T, K & FoundationElementDefinition>;
+
 // @public
 export enum GenerateHeaderOptions {
     // (undocumented)
@@ -1079,12 +1090,12 @@ export class HorizontalScroll extends FoundationElement {
 
 // @public
 export type HorizontalScrollOptions = FoundationElementDefinition & {
-    nextFlipper?: string | SyntheticViewTemplate;
-    previousFlipper?: string | SyntheticViewTemplate;
+    nextFlipper?: FoundationElementTemplate<SyntheticViewTemplate<any, HorizontalScroll>, HorizontalScrollOptions> | SyntheticViewTemplate | string;
+    previousFlipper?: FoundationElementTemplate<SyntheticViewTemplate<any, HorizontalScroll>, HorizontalScrollOptions> | SyntheticViewTemplate | string;
 };
 
 // @public (undocumented)
-export const horizontalScrollTemplate: (context: ElementDefinitionContext, definition: HorizontalScrollOptions) => ViewTemplate<HorizontalScroll>;
+export const horizontalScrollTemplate: FoundationElementTemplate<ViewTemplate<HorizontalScroll>, HorizontalScrollOptions>;
 
 // @public
 export type HorizontalScrollView = "default" | "mobile";
@@ -1363,6 +1374,8 @@ export class NumberField extends FormAssociatedNumberField {
     defaultSlottedNodes: Node[];
     // @internal
     handleChange(): void;
+    // @internal
+    handleKeyDown(e: KeyboardEvent): boolean;
     // @internal
     handleTextInput(): void;
     hideStep: boolean;
@@ -2012,6 +2025,8 @@ export class Toolbar extends FoundationElement {
     get activeIndex(): number;
     set activeIndex(value: number);
     // @internal
+    protected get allSlottedItems(): (HTMLElement | Node)[];
+    // @internal
     clickHandler(e: MouseEvent): boolean | void;
     // @internal (undocumented)
     connectedCallback(): void;
@@ -2023,9 +2038,11 @@ export class Toolbar extends FoundationElement {
     keydownHandler(e: KeyboardEvent): boolean | void;
     orientation: Orientation;
     // @internal
-    slottedItems: HTMLElement[];
+    protected reduceFocusableElements(): void;
     // @internal
-    protected slottedItemsChanged(prev: unknown, next: HTMLElement[]): void;
+    slottedItems: HTMLElement[];
+    // (undocumented)
+    protected slottedItemsChanged(): void;
     // @internal
     slottedLabel: HTMLElement[];
 }
@@ -2041,6 +2058,8 @@ export const toolbarTemplate: (context: ElementDefinitionContext, definition: Fo
 export class Tooltip extends FoundationElement {
     anchor: string;
     anchorElement: HTMLElement | null;
+    // Warning: (ae-incompatible-release-tags) The symbol "autoUpdateMode" is marked as @public, but its signature references "AutoUpdateMode" which is marked as @beta
+    autoUpdateMode: AutoUpdateMode;
     // (undocumented)
     connectedCallback(): void;
     // @internal
@@ -2188,7 +2207,7 @@ export function whitespaceFilter(value: Node, index: number, array: Node[]): boo
 // Warnings were encountered during analysis:
 //
 // dist/dts/design-token/design-token.d.ts:91:5 - (ae-forgotten-export) The symbol "create" needs to be exported by the entry point index.d.ts
-// dist/dts/di/di.d.ts:499:5 - (ae-forgotten-export) The symbol "SingletonOptions" needs to be exported by the entry point index.d.ts
+// dist/dts/di/di.d.ts:506:5 - (ae-forgotten-export) The symbol "SingletonOptions" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 

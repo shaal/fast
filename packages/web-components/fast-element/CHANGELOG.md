@@ -1,8 +1,24 @@
 # Change Log - @microsoft/fast-element
 
-This log was last generated on Fri, 21 May 2021 17:48:08 GMT and should not be manually modified.
+This log was last generated on Thu, 26 Aug 2021 07:17:43 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.4.2
+
+Thu, 26 Aug 2021 07:17:43 GMT
+
+### Patches
+
+- feat(fast-element): make the task queue resilient to task exceptions (roeisenb@microsoft.com)
+
+## 1.4.1
+
+Wed, 28 Jul 2021 07:17:22 GMT
+
+### Patches
+
+- implement patch to work around Angular optimization bug (nicholasrice@users.noreply.github.com)
 
 ## 1.4.0
 

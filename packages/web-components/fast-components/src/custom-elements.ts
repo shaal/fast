@@ -1,6 +1,7 @@
 /**
  * Export all custom element definitions
  */
+import type { Container } from "@microsoft/fast-foundation";
 import { fastAccordion, fastAccordionItem } from "./accordion/index";
 import { fastAnchor } from "./anchor/index";
 import { fastAnchoredRegion } from "./anchored-region/index";
@@ -13,6 +14,7 @@ import { fastCard } from "./card/index";
 import { fastCheckbox } from "./checkbox/index";
 import { fastCombobox } from "./combobox/index";
 import { fastDataGrid, fastDataGridCell, fastDataGridRow } from "./data-grid/index";
+import { fastDesignSystemProvider } from "./design-system-provider/index";
 import { fastDialog } from "./dialog/index";
 import { fastDisclosure } from "./disclosure/index";
 import { fastDivider } from "./divider/index";
@@ -42,15 +44,18 @@ import { fastTreeView } from "./tree-view/index";
 
 // Don't delete these. They're needed so that API-extractor doesn't add import types
 // with improper pathing
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Anchor } from "./anchor/index";
 import type { Button } from "./button/index";
 import type { Card } from "./card/index";
+import type { DesignSystemProvider } from "./design-system-provider/index";
 import type { Disclosure } from "./disclosure/index";
 import type { HorizontalScroll } from "./horizontal-scroll/index";
 import type { SliderLabel } from "./slider-label/index";
 import type { TextArea } from "./text-area/index";
 import type { TextField } from "./text-field/index";
 import type { Toolbar } from "./toolbar/index";
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 // When adding new components, make sure to add the component to the `allComponents` object
 // in addition to exporting the component by name. Ideally we would be able to just add
@@ -73,6 +78,7 @@ export {
     fastDataGrid,
     fastDataGridCell,
     fastDataGridRow,
+    fastDesignSystemProvider,
     fastDialog,
     fastDisclosure,
     fastDivider,
@@ -106,6 +112,9 @@ export {
 /**
  * All Web Components
  * @public
+ * @remarks
+ * This object can be passed directly to the Design System's `register` method to
+ * statically link and register all available components.
  */
 export const allComponents = {
     fastAccordion,
@@ -123,6 +132,7 @@ export const allComponents = {
     fastDataGrid,
     fastDataGridCell,
     fastDataGridRow,
+    fastDesignSystemProvider,
     fastDialog,
     fastDisclosure,
     fastDivider,
@@ -151,4 +161,19 @@ export const allComponents = {
     fastToolbar,
     fastTreeView,
     fastTreeItem,
+    register(container?: Container) {
+        if (!container) {
+            // preserve backward compatibility with code that loops through
+            // the values of this object and calls them as funcs with no args
+            return;
+        }
+
+        for (const key in this) {
+            if (key === "register") {
+                continue;
+            }
+
+            this[key]().register(container);
+        }
+    },
 };

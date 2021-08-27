@@ -32,7 +32,6 @@ import {
     Dimension,
     DirectionSwitch,
     Editor,
-    fastComponentExtendedSchemas,
     Logo,
     nativeElementExtendedSchemas,
     textSchema,
@@ -57,9 +56,17 @@ import {
     StandardLuminance,
     SwatchRGB,
 } from "@microsoft/fast-components";
-import { CreatorState, FormId, NavigationId, ProjectFile } from "./creator.props";
+import { LinkedDataActionType } from "@microsoft/fast-tooling-react/dist/form/templates/types";
+import { XOR } from "@microsoft/fast-tooling/dist/dts/data-utilities/type.utilities";
+import {
+    CreatorState,
+    ExternalInitializingData,
+    FormId,
+    NavigationId,
+    ProjectFile,
+} from "./creator.props";
 import { elementLibraries, elementLibraryContents } from "./configs";
-import { divTag } from "./configs/library.native.tags";
+import { divTag } from "./configs/native/library.native.tags";
 import { ProjectFileTransfer } from "./components";
 import { previewReady } from "./preview/preview";
 import { Footer } from "./site-footer";
@@ -71,7 +78,7 @@ import {
     renderPreviewSwitch,
 } from "./web-components";
 import { Device } from "./web-components/devices";
-import fastDesignTokensSchema from "./configs/library.fast.design-tokens.schema.json";
+import fluentDesignTokensSchema from "./configs/fluent-ui/library.fluent-ui.design-tokens.schema.json";
 import {
     creatorOriginatorId,
     CustomMessageSystemActions,
@@ -82,6 +89,7 @@ import {
     previewOriginatorId,
     rootOriginatorId,
 } from "./utilities";
+import { fluentUIComponentId } from "./configs/fluent-ui";
 
 DesignSystem.getOrCreate().register(
     fastBadge(),
@@ -109,10 +117,13 @@ fillColor.setValueFor(
 
 /* eslint-disable-next-line @typescript-eslint/no-var-requires */
 const FASTInlineLogo = require("@microsoft/site-utilities/statics/assets/fast-inline-logo.svg");
-const schemaDictionary: SchemaDictionary = {
+const schemaDictionaryWithNativeElements: SchemaDictionary = {
     ...nativeElementExtendedSchemas,
-    [fastDesignTokensSchema.id]: fastDesignTokensSchema,
-    [textSchema.id]: textSchema,
+    [textSchema.$id]: textSchema,
+};
+const schemaDictionaryWithDesignTokens: SchemaDictionary = {
+    ...schemaDictionaryWithNativeElements,
+    [fluentDesignTokensSchema.id]: fluentDesignTokensSchema,
 };
 
 export const previewAccentColor: string = "PREVIEW::ACCENTCOLOR";
@@ -132,7 +143,7 @@ class Creator extends Editor<{}, CreatorState> {
             return (
                 <LinkedDataControl
                     {...config}
-                    onChange={this.handleAddLinkedData(config.onChange)}
+                    onChange={this.handleLinkedDataUpdates(config.onChange)}
                 />
             );
         },
@@ -189,9 +200,8 @@ class Creator extends Editor<{}, CreatorState> {
             designSystemDataDictionary: [
                 {
                     [designTokensLinkedDataId]: {
-                        schemaId: "fastDesignTokens",
+                        schemaId: fluentDesignTokensSchema.$id,
                         data: {
-                            "accent-base-color": "#DA1A5F",
                             direction: Direction.ltr,
                             theme: StandardLuminance.LightMode,
                         },
@@ -208,6 +218,7 @@ class Creator extends Editor<{}, CreatorState> {
                 },
                 defaultElementDataId,
             ],
+            schemaDictionary: schemaDictionaryWithNativeElements,
             transparentBackground: false,
             lastMappedDataDictionaryToMonacoEditorHTMLValue: "",
             displayMode: DisplayMode.interactive,
@@ -303,7 +314,9 @@ class Creator extends Editor<{}, CreatorState> {
                                     accentBaseColor={
                                         accentColor !== undefined
                                             ? accentColor
-                                            : "#DA1A5F"
+                                            : fluentDesignTokensSchema?.properties?.[
+                                                  "accent-base-color"
+                                              ]?.default
                                     }
                                     onAccentColorPickerChange={
                                         this.handleAccentColorPickerChange
@@ -421,11 +434,16 @@ class Creator extends Editor<{}, CreatorState> {
         );
     };
 
-    private handleAddLinkedData = (onChange): ((e: ControlOnChangeConfig) => void) => {
+    private handleLinkedDataUpdates = (
+        onChange
+    ): ((e: ControlOnChangeConfig) => void) => {
         return (e: ControlOnChangeConfig): void => {
             Object.entries(elementLibraryContents).forEach(
                 ([elementLibraryId, schemaIds]: [string, string[]]) => {
-                    if (schemaIds.includes(e.value[0].schemaId)) {
+                    if (
+                        e.linkedDataAction === LinkedDataActionType.add &&
+                        schemaIds.includes(e.value[0].schemaId)
+                    ) {
                         onChange({
                             ...e,
                             value:
@@ -434,6 +452,11 @@ class Creator extends Editor<{}, CreatorState> {
                                         .componentDictionary[e.value[0].schemaId].example,
                                 ] || e.value,
                         });
+                    } else if (
+                        e.linkedDataAction === LinkedDataActionType.remove ||
+                        e.linkedDataAction === LinkedDataActionType.reorder
+                    ) {
+                        onChange(e);
                     }
                 }
             );
@@ -456,12 +479,12 @@ class Creator extends Editor<{}, CreatorState> {
                 this.fastMessageSystem.postMessage({
                     type: MessageSystemType.initialize,
                     dataDictionary: this.state.dataDictionary,
-                    schemaDictionary,
+                    schemaDictionary: schemaDictionaryWithNativeElements,
                 });
                 this.fastDesignMessageSystem.postMessage({
                     type: MessageSystemType.initialize,
                     dataDictionary: this.state.designSystemDataDictionary,
-                    schemaDictionary,
+                    schemaDictionary: schemaDictionaryWithDesignTokens,
                 });
                 this.fastMessageSystem.postMessage({
                     type: MessageSystemType.custom,
@@ -472,6 +495,7 @@ class Creator extends Editor<{}, CreatorState> {
                 } as CustomMessageIncomingOutgoing<any>);
                 updatedState.previewReady = true;
                 this.updateEditorContent(this.state.dataDictionary);
+                this.handleAddLibrary(fluentUIComponentId);
             } else if (e.data.value) {
                 this.fastMessageSystem.postMessage({
                     type: MessageSystemType.navigation,
@@ -507,6 +531,10 @@ class Creator extends Editor<{}, CreatorState> {
             }
         }
 
+        if (e.data.type === MessageSystemType.schemaDictionary) {
+            updatedState.schemaDictionary = e.data.schemaDictionary;
+        }
+
         this.setState(updatedState as CreatorState);
     };
 
@@ -518,18 +546,24 @@ class Creator extends Editor<{}, CreatorState> {
 
     private handleWindowMessage = (e: MessageEvent): void => {
         if (e.data) {
-            try {
-                const messageData = JSON.parse(e.data);
+            let messageData: XOR<null, ExternalInitializingData>;
 
-                if (messageData.type === "dataDictionary" && messageData.data) {
-                    this.fastMessageSystem.postMessage({
-                        type: MessageSystemType.initialize,
-                        data: messageData.data,
-                        schemaDictionary,
-                    });
-                }
+            try {
+                messageData = JSON.parse(e.data);
             } catch (e) {
-                console.log(e);
+                messageData = null;
+            }
+
+            if (
+                messageData &&
+                messageData.type === MessageSystemType.dataDictionary &&
+                messageData.data
+            ) {
+                this.fastMessageSystem.postMessage({
+                    type: MessageSystemType.initialize,
+                    data: messageData.data,
+                    schemaDictionary: schemaDictionaryWithNativeElements,
+                });
             }
         }
     };
@@ -539,7 +573,7 @@ class Creator extends Editor<{}, CreatorState> {
             this.fastMessageSystem.postMessage({
                 type: MessageSystemType.initialize,
                 data: projectFile.dataDictionary,
-                schemaDictionary,
+                schemaDictionary: schemaDictionaryWithNativeElements,
             })
         );
     };
@@ -571,7 +605,7 @@ class Creator extends Editor<{}, CreatorState> {
     }
 
     private updateMonacoEditor = (): void => {
-        this.createMonacoEditor(monaco);
+        this.createMonacoEditor(monaco, undefined, { fontSize: "16px" });
 
         if (this.editorContainerRef.current && this.editor) {
             this.editor.layout();
@@ -683,7 +717,7 @@ class Creator extends Editor<{}, CreatorState> {
                 this.fastDesignMessageSystem.postMessage({
                     type: MessageSystemType.initialize,
                     dataDictionary: this.state.designSystemDataDictionary,
-                    schemaDictionary,
+                    schemaDictionary: schemaDictionaryWithDesignTokens,
                 });
             }
         );

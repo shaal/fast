@@ -1,8 +1,174 @@
 # Change Log - @microsoft/fast-tooling-react
 
-This log was last generated on Sun, 18 Jul 2021 07:16:22 GMT and should not be manually modified.
+This log was last generated on Thu, 26 Aug 2021 07:17:43 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 2.10.12
+
+Thu, 26 Aug 2021 07:17:43 GMT
+
+### Patches
+
+- the linked data removal button and the dropdown arrow will not display over absolutely positioned controls (7559015+janechu@users.noreply.github.com)
+
+## 2.10.11
+
+Wed, 25 Aug 2021 07:17:07 GMT
+
+### Patches
+
+- add a list of linked data that cannot be dropped to (7559015+janechu@users.noreply.github.com)
+
+## 2.10.10
+
+Mon, 23 Aug 2021 07:14:54 GMT
+
+### Patches
+
+- Bump @microsoft/fast-tooling to v0.27.3 (ben@platform5.ch)
+
+## 2.10.9
+
+Sun, 22 Aug 2021 07:17:14 GMT
+
+### Patches
+
+- fixes an issue where the CSS layout would not update when style was updated in the Monaco Editor (7559015+janechu@users.noreply.github.com)
+
+## 2.10.8
+
+Thu, 19 Aug 2021 07:15:21 GMT
+
+### Patches
+
+- Bump @microsoft/fast-tooling to v0.27.1 (sethdonohue@Admins-MBP.guest.corp.microsoft.com)
+
+## 2.10.7
+
+Wed, 18 Aug 2021 07:16:21 GMT
+
+### Patches
+
+- focus and select text when navigation items are double clicked and adjust behavior so that any item can be edited, not just active navigation items (7559015+janechu@users.noreply.github.com)
+
+## 2.10.6
+
+Tue, 17 Aug 2021 07:14:05 GMT
+
+### Patches
+
+- Bump @microsoft/fast-tooling to v0.26.6 (44823142+williamw2@users.noreply.github.com)
+
+## 2.10.5
+
+Sun, 15 Aug 2021 07:17:25 GMT
+
+### Patches
+
+- various fixes to the Navigations drag and drop making it more flexible for web components (7559015+janechu@users.noreply.github.com)
+
+## 2.10.4
+
+Thu, 12 Aug 2021 07:16:50 GMT
+
+### Patches
+
+- Bump @microsoft/fast-foundation to v2.6.4 (scomea@microsoft.com)
+
+## 2.10.3
+
+Wed, 11 Aug 2021 07:14:31 GMT
+
+### Patches
+
+- Bump @microsoft/fast-tooling to v0.26.3 (44823142+williamw2@users.noreply.github.com)
+
+## 2.10.2
+
+Sun, 08 Aug 2021 07:18:56 GMT
+
+### Patches
+
+- resolve the expanded navigation items mismatch after triggering the expand trigger then a navigation message (7559015+janechu@users.noreply.github.com)
+
+## 2.10.1
+
+Thu, 05 Aug 2021 07:17:32 GMT
+
+### Patches
+
+- Bump @microsoft/fast-tooling to v0.26.1 (khamu@microsoft.com)
+
+## 2.10.0
+
+Wed, 04 Aug 2021 07:15:14 GMT
+
+### Minor changes
+
+- adding file component react wrapper (44823142+williamw2@users.noreply.github.com)
+
+### Patches
+
+- Bump @microsoft/fast-foundation to v2.6.3 (chhol@microsoft.com)
+- Bump @microsoft/fast-tooling to v0.26.0 (44823142+williamw2@users.noreply.github.com)
+- Bump @microsoft/fast-components to v2.5.5 (chhol@microsoft.com)
+
+## 2.9.10
+
+Tue, 03 Aug 2021 07:17:33 GMT
+
+### Patches
+
+- Bump @microsoft/fast-tooling to v0.25.7 (mathieu.lavoie@logmein.com)
+
+## 2.9.9
+
+Sun, 01 Aug 2021 07:17:15 GMT
+
+### Patches
+
+- Bump @microsoft/fast-components to v2.5.3 (roeisenb@microsoft.com)
+
+## 2.9.8
+
+Thu, 29 Jul 2021 07:18:18 GMT
+
+### Patches
+
+- Bump @microsoft/fast-tooling to v0.25.5 (47367562+bheston@users.noreply.github.com)
+
+## 2.9.7
+
+Wed, 28 Jul 2021 07:17:22 GMT
+
+### Patches
+
+- Bump @microsoft/fast-tooling to v0.25.4 (nicholasrice@users.noreply.github.com)
+
+## 2.9.6
+
+Sun, 25 Jul 2021 07:17:41 GMT
+
+### Patches
+
+- Bump @microsoft/fast-tooling to v0.25.3 (scomea@microsoft.com)
+
+## 2.9.5
+
+Thu, 22 Jul 2021 07:19:53 GMT
+
+### Patches
+
+- Bump @microsoft/fast-tooling to v0.25.2 (chhol@microsoft.com)
+
+## 2.9.4
+
+Wed, 21 Jul 2021 07:14:48 GMT
+
+### Patches
+
+- Bump @microsoft/fast-tooling to v0.25.1 (roeisenb@microsoft.com)
 
 ## 2.9.3
 
